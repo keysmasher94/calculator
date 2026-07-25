@@ -1,3 +1,32 @@
+@font-face {
+  font-family: "JetBrains";
+  src: url("fonts/JetBrainsMonoNerdFont-Regular.ttf");
+}
+
 body {
   background-color: hsl(164 90% 90% / 0.4);
+  display: flex;
+  flex-direction: column;
+  /*justify-content: center; maybe add later */
+  align-items: center;
+  font-family: "JetBrains";
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+button {
+  font-size: 2rem;
+  padding: 5px;
+  margin: 5px;
+}
+
+.screen {
+  width: 14rem;
+  height: 5rem;
+  border: black solid 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
