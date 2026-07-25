@@ -26,7 +26,11 @@ let num1 = null;
 let num2 = null;
 let operator = null;
 
-// TODO: play with a calculator when done and compare how they work
+// TODO:
+// - If a second operator is pressed when the `=` should be, calculate num1 and
+// num2 at that point, then add the operator to the next sum
+// - Round numbers with long decimal points / accept floats
+// - Don't allow multiple '.'s in one number
 btn.forEach((button) => {
   button.addEventListener("click", (e) => {
     if (num1 == null) {
