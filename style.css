@@ -14,12 +14,21 @@ body {
 
 h1 {
   font-size: 2.5rem;
+  margin-bottom: 0.4rem;
 }
 
+h2 {
+  margin-top: 0.4rem;
+  margin-bottom: 3rem;
+}
+
+/* TODO: reorder buttons */
 button {
   font-size: 2rem;
-  padding: 5px;
+  padding: 0.8rem;
   margin: 5px;
+  width: 59px;
+  border-radius: 8px;
 }
 
 .screen {
@@ -29,4 +38,27 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 1.2rem;
+  background-color: darkgrey;
+  font-weight: 300;
+  font-size: 1.7rem;
+  border-radius: 4px;
+}
+
+.calc-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: red;
+  padding: 1.1rem;
+  border-radius: 12px;
+  border: black 0.8px solid;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

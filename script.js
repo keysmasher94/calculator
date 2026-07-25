@@ -1,6 +1,9 @@
 // TODO:
 //  - Add a 'clear button'
 //  - Make it keyboard accessible
+//  - Display "ERROR" if it's a bad sum, like 2/0
+//  - Make the text in screen smaller if too many items
+//  - Display "ERROR" if too many characters on the screen
 const btn = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
 
