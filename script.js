@@ -2,10 +2,6 @@
 //  - Make it keyboard accessible
 //  - Display "ERROR" if too many characters on the screen (use toPrecision function)
 //  - Add backspace functionality
-//  - Add functionality that if num1, operator, and num2 are not null, if an
-//  operator is pressed, the result is calculated and the answer becomes num1,
-//  the operator becomes the next operator, and the answer and the operator are
-//  displayed on the screen
 const btn = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
 
@@ -114,7 +110,7 @@ btn.forEach((button) => {
       // Keep adding numbers to num2 while the input are numbers
       num2 += e.target.id;
       screen.textContent = `${num1} ${operator} ${num2}`;
-    } else if (e.target.id === "=") {
+    } else if (e.target.id === "=" || OPERATORS.includes(e.target.id)) {
       num1 = parseFloat(num1);
       num2 = parseFloat(num2);
       switch (operator) {
@@ -135,7 +131,12 @@ btn.forEach((button) => {
           break;
       }
       num2 = null;
-      operator = null;
+      if (OPERATORS.includes(e.target.id)) {
+        operator = e.target.id;
+        screen.textContent = `${num1} ${operator}`;
+      } else {
+        operator = null;
+      }
     }
   });
 });
