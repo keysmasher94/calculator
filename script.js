@@ -1,5 +1,5 @@
 // TODO:
-//  - If I divide too many times it breaks it
+//  - If I divide too many times it breaks it (only with decimals)
 const btn = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
 
@@ -184,7 +184,6 @@ btn.forEach((button) => {
 });
 
 addEventListener("keydown", (e) => {
-  console.log(e.key);
   if (VALID_KEYS.includes(e.key)) {
     if (e.key === "Backspace") {
       value = "<-";
