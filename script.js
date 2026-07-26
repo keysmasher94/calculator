@@ -1,7 +1,6 @@
 // TODO:
 //  - Make it keyboard accessible
 //  - Display "ERROR" if too many characters on the screen (use toPrecision function)
-//  - Add backspace functionality
 const btn = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
 
