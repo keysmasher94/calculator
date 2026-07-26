@@ -1,9 +1,31 @@
 // TODO:
-//  - Make it keyboard accessible
+//  - If I divide too many times it breaks it
 const btn = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
 
 const OPERATORS = ["+", "-", "*", "/", "^"];
+const VALID_KEYS = [
+  "+",
+  "-",
+  "*",
+  "/",
+  "^",
+  "Backspace",
+  "Delete",
+  "Enter",
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  ".",
+  "=",
+];
 const SCREEN_WIDTH = 12; // Actual width contains 18 numbers, but this allows
 // for 3 spaces for gaps and operators
 
@@ -157,64 +179,81 @@ let operator = null;
 
 btn.forEach((button) => {
   button.addEventListener("click", (e) => {
-    // FIXME: figure out what the clear buttons actually do on a calculator
-    if (e.target.id === "clear") {
-      clear("clear");
-    } else if (e.target.id === "clear-all") {
-      clear("clear-all");
-    } else if (e.target.id === "<-") {
-      backspace();
-    } else if (num1 === null) {
-      addNum("num1", e.target.id);
-    } else if (
-      (!isNaN(parseInt(e.target.id)) || e.target.id === ".") &&
-      operator === null
-    ) {
-      // Keep adding numbers to num1 while the input are numbers
-      addNum("num1", e.target.id);
-    } else if (operator === null) {
-      // Only add an input if an operator is selected
-      if (OPERATORS.includes(e.target.id)) {
-        if (num1.length <= SCREEN_WIDTH - 1) {
-          operator = e.target.id;
-          screen.textContent = `${num1} ${operator}`;
-        }
-      }
-    } else if (num2 === null) {
-      addNum("num2", e.target.id);
-    } else if (!isNaN(parseInt(e.target.id)) || e.target.id === ".") {
-      // Keep adding numbers to num2 while the input are numbers
-      addNum("num2", e.target.id);
-    } else if (e.target.id === "=" || OPERATORS.includes(e.target.id)) {
-      num1 = parseFloat(num1);
-      num2 = parseFloat(num2);
-      switch (operator) {
-        case "+":
-          num1 = add(num1, num2);
-          break;
-        case "-":
-          num1 = subtract(num1, num2);
-          break;
-        case "*":
-          num1 = multiply(num1, num2);
-          break;
-        case "/":
-          num1 = divide(num1, num2);
-          break;
-        case "^":
-          num1 = exponent(num1, num2);
-          break;
-      }
-      if (num1 !== null) {
-        num1 = num1.toString();
-      }
-      num2 = null;
-      if (OPERATORS.includes(e.target.id)) {
-        operator = e.target.id;
-        screen.textContent = `${num1} ${operator}`;
-      } else {
-        operator = null;
-      }
-    }
+    calculate(e.target.id);
   });
 });
+
+addEventListener("keydown", (e) => {
+  console.log(e.key);
+  if (VALID_KEYS.includes(e.key)) {
+    if (e.key === "Backspace") {
+      value = "<-";
+    } else if (e.key === "Delete") {
+      value = "clear-all";
+    } else if (e.key === "Enter") {
+      value = "=";
+    } else {
+      value = e.key;
+    }
+    calculate(value);
+  }
+});
+
+function calculate(value) {
+  // FIXME: figure out what the clear buttons actually do on a calculator
+  if (value === "clear") {
+    clear("clear");
+  } else if (value === "clear-all") {
+    clear("clear-all");
+  } else if (value === "<-") {
+    backspace();
+  } else if (num1 === null) {
+    addNum("num1", value);
+  } else if ((!isNaN(parseInt(value)) || value === ".") && operator === null) {
+    // Keep adding numbers to num1 while the input are numbers
+    addNum("num1", value);
+  } else if (operator === null) {
+    // Only add an input if an operator is selected
+    if (OPERATORS.includes(value)) {
+      if (num1.length <= SCREEN_WIDTH - 1) {
+        operator = value;
+        screen.textContent = `${num1} ${operator}`;
+      }
+    }
+  } else if (num2 === null) {
+    addNum("num2", value);
+  } else if (!isNaN(parseInt(value)) || value === ".") {
+    // Keep adding numbers to num2 while the input are numbers
+    addNum("num2", value);
+  } else if (value === "=" || OPERATORS.includes(value)) {
+    num1 = parseFloat(num1);
+    num2 = parseFloat(num2);
+    switch (operator) {
+      case "+":
+        num1 = add(num1, num2);
+        break;
+      case "-":
+        num1 = subtract(num1, num2);
+        break;
+      case "*":
+        num1 = multiply(num1, num2);
+        break;
+      case "/":
+        num1 = divide(num1, num2);
+        break;
+      case "^":
+        num1 = exponent(num1, num2);
+        break;
+    }
+    if (num1 !== null) {
+      num1 = num1.toString();
+    }
+    num2 = null;
+    if (OPERATORS.includes(value)) {
+      operator = value;
+      screen.textContent = `${num1} ${operator}`;
+    } else {
+      operator = null;
+    }
+  }
+}
