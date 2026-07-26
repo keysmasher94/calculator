@@ -1,6 +1,5 @@
 // TODO:
 //  - Make it keyboard accessible
-//  - Allow backspace button to just remove one digit
 const btn = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
 
@@ -57,6 +56,10 @@ function divide(a, b) {
 
 function exponent(a, b) {
   let answer = a ** b;
+  if (answer > 999999999999 || answer == Infinity) {
+    screen.textContent = "TOO LARGE";
+    return null;
+  }
   if (answer % 1 !== 0) {
     screen.textContent = answer.toFixed(2);
     return answer;
@@ -111,12 +114,21 @@ function addNum(order, number) {
       }
       screen.textContent = num1;
     } else if (order === "num2") {
-      if (num2 === null) {
+      // Make sure the first number isn't too big on its own
+      if (num2 === null && num1.length <= SCREEN_WIDTH - 1) {
         num2 = number;
-      } else if (num1.length + num2.length < SCREEN_WIDTH) {
+        screen.textContent = `${num1} ${operator} ${num2}`;
+        //} else if (num1.length + num2.length < SCREEN_WIDTH) {
+        //num2 += number;
+      } else if (num2 === null && num1.length >= SCREEN_WIDTH) {
+        return;
+      } else if (num2 !== null && num1.length + num2.length >= SCREEN_WIDTH) {
+        return;
+      } else if (num2 !== null) {
         num2 += number;
+        screen.textContent = `${num1} ${operator} ${num2}`;
       }
-      screen.textContent = `${num1} ${operator} ${num2}`;
+      //screen.textContent = `${num1} ${operator} ${num2}`;
     }
   } else if (number === ".") {
     // SCREEN_WIDTH - 2 allows for one digit in num2 and one additional digit so
@@ -124,14 +136,14 @@ function addNum(order, number) {
     if (
       order === "num1" &&
       !num1.includes(".") &&
-      num1.length < SCREEN_WIDTH - 2
+      num1.length <= SCREEN_WIDTH
     ) {
       num1 += ".";
       screen.textContent = num1;
     } else if (
       order === "num2" &&
       !num2.includes(".") &&
-      num1.length + num2.length < SCREEN_WIDTH - 1
+      num1.length + num2.length <= SCREEN_WIDTH
     ) {
       num2 += ".";
       screen.textContent = `${num1} ${operator} ${num2}`;
@@ -163,8 +175,10 @@ btn.forEach((button) => {
     } else if (operator === null) {
       // Only add an input if an operator is selected
       if (OPERATORS.includes(e.target.id)) {
-        operator = e.target.id;
-        screen.textContent = `${num1} ${operator}`;
+        if (num1.length <= SCREEN_WIDTH - 1) {
+          operator = e.target.id;
+          screen.textContent = `${num1} ${operator}`;
+        }
       }
     } else if (num2 === null) {
       addNum("num2", e.target.id);
@@ -191,7 +205,9 @@ btn.forEach((button) => {
           num1 = exponent(num1, num2);
           break;
       }
-      num1 = num1.toString();
+      if (num1 !== null) {
+        num1 = num1.toString();
+      }
       num2 = null;
       if (OPERATORS.includes(e.target.id)) {
         operator = e.target.id;
