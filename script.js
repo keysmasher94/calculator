@@ -115,12 +115,21 @@ function backspace() {
 }
 
 function clear(type) {
-  num2 = null;
-  operator = null;
   if (type === "clear") {
-    screen.textContent = num1;
+    if (num2 !== null) {
+      num2 = null;
+      screen.textContent = `${num1} ${operator}`;
+    } else if (operator !== null) {
+      operator = null;
+      screen.textContent = num1;
+    } else {
+      num1 = null;
+      screen.textContent = "";
+    }
   } else if (type === "clear-all") {
     num1 = null;
+    num2 = null;
+    operator = null;
     screen.textContent = "";
   }
 }
