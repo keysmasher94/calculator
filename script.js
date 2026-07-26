@@ -1,6 +1,7 @@
 // TODO:
 //  - Make it keyboard accessible
 //  - Display "ERROR" if too many characters on the screen (use toPrecision function)
+//  - Make check for only one decimal point
 const btn = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
 
@@ -77,6 +78,37 @@ function backspace() {
   }
 }
 
+function clear(type) {
+  num2 = null;
+  operator = null;
+  if (type === "clear") {
+    screen.textContent = num1;
+  } else if (type === "clear-all") {
+    num1 = null;
+    screen.textContent = "";
+  }
+}
+
+function addNum(order, number) {
+  if (!isNaN(parseInt(number))) {
+    if (order === "num1") {
+      if (num1 === null) {
+        num1 = number;
+      } else {
+        num1 += number;
+      }
+      screen.textContent = num1;
+    } else if (order === "num2") {
+      if (num2 === null) {
+        num2 = number;
+      } else {
+        num2 += number;
+      }
+      screen.textContent = `${num1} ${operator} ${num2}`;
+    }
+  }
+}
+
 let num1 = null;
 let num2 = null;
 let operator = null;
@@ -85,29 +117,19 @@ btn.forEach((button) => {
   button.addEventListener("click", (e) => {
     // FIXME: figure out what the clear buttons actually do on a calculator
     if (e.target.id === "clear") {
-      num2 = null;
-      operator = null;
-      screen.textContent = num1;
+      clear("clear");
     } else if (e.target.id === "clear-all") {
-      num1 = null;
-      operator = null;
-      num2 = null;
-      screen.textContent = "";
+      clear("clear-all");
     } else if (e.target.id === "<-") {
       backspace();
     } else if (num1 === null) {
-      // Check that the input is a number
-      if (!isNaN(parseInt(e.target.id))) {
-        num1 = e.target.id;
-        screen.textContent = num1;
-      }
+      addNum("num1", e.target.id);
     } else if (
       (!isNaN(parseInt(e.target.id)) || e.target.id === ".") &&
       operator === null
     ) {
       // Keep adding numbers to num1 while the input are numbers
-      num1 += e.target.id;
-      screen.textContent = num1;
+      addNum("num1", e.target.id);
     } else if (operator === null) {
       // Only add an input if an operator is selected
       if (OPERATORS.includes(e.target.id)) {
@@ -115,15 +137,10 @@ btn.forEach((button) => {
         screen.textContent = `${num1} ${operator}`;
       }
     } else if (num2 === null) {
-      // Check that input is a number
-      if (!isNaN(parseInt(e.target.id))) {
-        num2 = e.target.id;
-        screen.textContent = `${num1} ${operator} ${num2}`;
-      }
+      addNum("num2", e.target.id);
     } else if (!isNaN(parseInt(e.target.id)) || e.target.id === ".") {
       // Keep adding numbers to num2 while the input are numbers
-      num2 += e.target.id;
-      screen.textContent = `${num1} ${operator} ${num2}`;
+      addNum("num2", e.target.id);
     } else if (e.target.id === "=" || OPERATORS.includes(e.target.id)) {
       num1 = parseFloat(num1);
       num2 = parseFloat(num2);
