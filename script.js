@@ -106,6 +106,14 @@ function addNum(order, number) {
       }
       screen.textContent = `${num1} ${operator} ${num2}`;
     }
+  } else if (number === ".") {
+    if (order === "num1" && !num1.includes(".")) {
+      num1 += ".";
+      screen.textContent = num1;
+    } else if (order === "num2" && !num2.includes(".")) {
+      num2 += ".";
+      screen.textContent = `${num1} ${operator} ${num2}`;
+    }
   }
 }
 
