@@ -6,6 +6,8 @@
 const btn = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
 
+const OPERATORS = ["+", "-", "*", "/", "^"];
+
 function add(a, b) {
   return a + b;
 }
