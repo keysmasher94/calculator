@@ -1,11 +1,12 @@
 // TODO:
 //  - Make it keyboard accessible
-//  - Display "ERROR" if too many characters on the screen (use toPrecision function)
-//  - Make check for only one decimal point
+//  - Allow backspace button to just remove one digit
 const btn = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
 
 const OPERATORS = ["+", "-", "*", "/", "^"];
+const SCREEN_WIDTH = 12; // Actual width contains 18 numbers, but this allows
+// for 3 spaces for gaps and operators
 
 function add(a, b) {
   let answer = a + b;
@@ -67,14 +68,24 @@ function exponent(a, b) {
 
 function backspace() {
   if (num2 !== null) {
-    num2 = null;
-    screen.textContent = `${num1} ${operator}`;
+    if (num2.length >= 1) {
+      num2 = num2.slice(0, -1);
+      screen.textContent = `${num1} ${operator} ${num2}`;
+    } else {
+      num2 = null;
+      screen.textContent = `${num1} ${operator}`;
+    }
   } else if (operator !== null) {
     operator = null;
     screen.textContent = num1;
   } else if (num1 !== null) {
-    num1 = null;
-    screen.textContent = "";
+    if (num1.length === 1) {
+      num1 = null;
+      screen.textContent = "";
+    } else {
+      num1 = num1.slice(0, -1);
+      screen.textContent = num1;
+    }
   }
 }
 
@@ -94,23 +105,34 @@ function addNum(order, number) {
     if (order === "num1") {
       if (num1 === null) {
         num1 = number;
-      } else {
+        // SCREEN_WIDTH - 1 allows for at least one digit in num2
+      } else if (num1.length < SCREEN_WIDTH - 1) {
         num1 += number;
       }
       screen.textContent = num1;
     } else if (order === "num2") {
       if (num2 === null) {
         num2 = number;
-      } else {
+      } else if (num1.length + num2.length < SCREEN_WIDTH) {
         num2 += number;
       }
       screen.textContent = `${num1} ${operator} ${num2}`;
     }
   } else if (number === ".") {
-    if (order === "num1" && !num1.includes(".")) {
+    // SCREEN_WIDTH - 2 allows for one digit in num2 and one additional digit so
+    // the last character isn't a '.'
+    if (
+      order === "num1" &&
+      !num1.includes(".") &&
+      num1.length < SCREEN_WIDTH - 2
+    ) {
       num1 += ".";
       screen.textContent = num1;
-    } else if (order === "num2" && !num2.includes(".")) {
+    } else if (
+      order === "num2" &&
+      !num2.includes(".") &&
+      num1.length + num2.length < SCREEN_WIDTH - 1
+    ) {
       num2 += ".";
       screen.textContent = `${num1} ${operator} ${num2}`;
     }
@@ -169,6 +191,7 @@ btn.forEach((button) => {
           num1 = exponent(num1, num2);
           break;
       }
+      num1 = num1.toString();
       num2 = null;
       if (OPERATORS.includes(e.target.id)) {
         operator = e.target.id;
