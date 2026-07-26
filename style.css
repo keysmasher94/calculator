@@ -1,3 +1,5 @@
+/* TODO: figure out why 'CE' and "<-" are pushed to the right in their boxes and
+ * fix it */
 @font-face {
   font-family: "JetBrains";
   src: url("fonts/JetBrainsMonoNerdFont-Regular.ttf");
@@ -23,15 +25,17 @@ h2 {
 }
 
 button {
+  font-family: "JetBrains";
   font-size: 2rem;
   padding: 0.8rem;
   margin: 5px;
   width: 59px;
   border-radius: 8px;
+  text-align: center;
 }
 
 .screen {
-  width: 14rem;
+  width: 17rem;
   height: 5rem;
   border: black solid 2px;
   display: flex;
@@ -42,6 +46,7 @@ button {
   font-weight: 300;
   font-size: 1.7rem;
   border-radius: 4px;
+  font-family: "JetBrains";
 }
 
 .calc-body {
