@@ -1,5 +1,5 @@
 /* TODO: figure out why 'CE' and "<-" are pushed to the right in their boxes and
- * fix it */
+ * fix it + refactor */
 @font-face {
   font-family: "JetBrains";
   src: url("fonts/JetBrainsMonoNerdFont-Regular.ttf");

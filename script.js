@@ -65,6 +65,19 @@ function exponent(a, b) {
   }
 }
 
+function backspace() {
+  if (num2 !== null) {
+    num2 = null;
+    screen.textContent = `${num1} ${operator}`;
+  } else if (operator !== null) {
+    operator = null;
+    screen.textContent = num1;
+  } else if (num1 !== null) {
+    num1 = null;
+    screen.textContent = "";
+  }
+}
+
 let num1 = null;
 let num2 = null;
 let operator = null;
@@ -81,6 +94,8 @@ btn.forEach((button) => {
       operator = null;
       num2 = null;
       screen.textContent = "";
+    } else if (e.target.id === "<-") {
+      backspace();
     } else if (num1 === null) {
       // Check that the input is a number
       if (!isNaN(parseInt(e.target.id))) {
