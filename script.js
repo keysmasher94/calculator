@@ -1,5 +1,3 @@
-// TODO:
-//  - If I divide too many times it breaks it (only with decimals)
 const btn = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
 
@@ -30,35 +28,21 @@ const SCREEN_WIDTH = 12; // Actual width contains 18 numbers, but this allows
 // for 3 spaces for gaps and operators
 
 function add(a, b) {
-  let answer = a + b;
-  if (answer % 1 !== 0) {
-    screen.textContent = answer.toFixed(2);
-    return answer;
-  } else {
-    screen.textContent = answer;
-    return answer;
-  }
+  let answer = Math.round((a + b) * 100) / 100;
+  screen.textContent = answer;
+  return answer;
 }
+
 function subtract(a, b) {
-  let answer = a - b;
-  if (answer % 1 !== 0) {
-    screen.textContent = answer.toFixed(2);
-    return answer;
-  } else {
-    screen.textContent = answer;
-    return answer;
-  }
+  let answer = Math.round((a - b) * 100) / 100;
+  screen.textContent = answer;
+  return answer;
 }
 
 function multiply(a, b) {
-  let answer = a * b;
-  if (answer % 1 !== 0) {
-    screen.textContent = answer.toFixed(2);
-    return answer;
-  } else {
-    screen.textContent = answer;
-    return answer;
-  }
+  let answer = Math.round(a * b * 100) / 100;
+  screen.textContent = answer;
+  return answer;
 }
 
 function divide(a, b) {
@@ -66,29 +50,19 @@ function divide(a, b) {
     screen.textContent = "ERROR";
     return null;
   }
-  let answer = a / b;
-  if (answer % 1 !== 0) {
-    screen.textContent = answer.toFixed(2);
-    return answer;
-  } else {
-    screen.textContent = answer;
-    return answer;
-  }
+  let answer = Math.round((a / b) * 100) / 100;
+  screen.textContent = answer;
+  return answer;
 }
 
 function exponent(a, b) {
-  let answer = a ** b;
+  let answer = Math.round(a ** b * 100) / 100;
   if (answer > 999999999999 || answer == Infinity) {
     screen.textContent = "TOO LARGE";
     return null;
   }
-  if (answer % 1 !== 0) {
-    screen.textContent = answer.toFixed(2);
-    return answer;
-  } else {
-    screen.textContent = answer;
-    return answer;
-  }
+  screen.textContent = answer;
+  return answer;
 }
 
 function backspace() {
@@ -208,7 +182,6 @@ addEventListener("keydown", (e) => {
 });
 
 function calculate(value) {
-  // FIXME: figure out what the clear buttons actually do on a calculator
   if (value === "clear") {
     clear("clear");
   } else if (value === "clear-all") {
