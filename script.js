@@ -189,6 +189,7 @@ btn.forEach((button) => {
 
 addEventListener("keydown", (e) => {
   if (VALID_KEYS.includes(e.key)) {
+    console.log(`${e.key} first check`);
     if (e.key === "Backspace") {
       value = "<-";
     } else if (e.key === "Delete") {
