@@ -216,9 +216,11 @@ function calculate(value) {
   } else if ((!isNaN(parseInt(value)) || value === ".") && operator === null) {
     // Keep adding numbers to num1 while the input are numbers
     addNum("num1", value);
-  } else if (operator === null) {
+  } else if (operator === null || OPERATORS.includes(value)) {
     // Only add an input if an operator is selected
     if (OPERATORS.includes(value)) {
+      // TODO: change this so if there's an operator, and you press another
+      // operator, it changes the operator
       if (num1.length <= SCREEN_WIDTH - 1) {
         operator = value;
         screen.textContent = `${num1} ${operator}`;
