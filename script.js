@@ -49,19 +49,19 @@ const SCREEN_WIDTH = 12; // Actual width contains 18 numbers, but this allows
 // for 3 spaces for gaps and operators
 
 function add(a, b) {
-  let answer = Math.round((a + b) * 100) / 100;
+  let answer = Math.round((a + b) * 1000) / 1000;
   screen.textContent = answer;
   return answer;
 }
 
 function subtract(a, b) {
-  let answer = Math.round((a - b) * 100) / 100;
+  let answer = Math.round((a - b) * 1000) / 1000;
   screen.textContent = answer;
   return answer;
 }
 
 function multiply(a, b) {
-  let answer = Math.round(a * b * 100) / 100;
+  let answer = Math.round(a * b * 1000) / 1000;
   screen.textContent = answer;
   return answer;
 }
@@ -71,7 +71,7 @@ function divide(a, b) {
     screen.textContent = "ERROR";
     return null;
   }
-  let answer = Math.round((a / b) * 100) / 100;
+  let answer = Math.round((a / b) * 1000) / 1000;
   screen.textContent = answer;
   return answer;
 }
@@ -135,7 +135,8 @@ function addNum(order, number) {
       if (num1 === null) {
         num1 = number;
         // SCREEN_WIDTH - 1 allows for at least one digit in num2
-      } else if (num1.length < SCREEN_WIDTH - 1) {
+        // `num1 !== 0` stops from having multiple 0s before the decimal point
+      } else if (num1.length < SCREEN_WIDTH - 1 && num1 !== "0") {
         num1 += number;
       }
       screen.textContent = num1;
@@ -144,13 +145,15 @@ function addNum(order, number) {
       if (num2 === null && num1.length <= SCREEN_WIDTH - 1) {
         num2 = number;
         screen.textContent = `${num1} ${operator} ${num2}`;
-        //} else if (num1.length + num2.length < SCREEN_WIDTH) {
-        //num2 += number;
       } else if (num2 === null && num1.length >= SCREEN_WIDTH) {
         return;
-      } else if (num2 !== null && num1.length + num2.length >= SCREEN_WIDTH) {
+      } else if (
+        num2 !== null &&
+        num1.length + num2.length >= SCREEN_WIDTH &&
+        num2 !== "0"
+      ) {
         return;
-      } else if (num2 !== null) {
+      } else if (num2 !== null && num2 !== "0") {
         num2 += number;
         screen.textContent = `${num1} ${operator} ${num2}`;
       }
@@ -159,20 +162,22 @@ function addNum(order, number) {
   } else if (number === ".") {
     // SCREEN_WIDTH - 2 allows for one digit in num2 and one additional digit so
     // the last character isn't a '.'
-    if (
-      order === "num1" &&
-      !num1.includes(".") &&
-      num1.length <= SCREEN_WIDTH
-    ) {
-      num1 += ".";
-      screen.textContent = num1;
-    } else if (
-      order === "num2" &&
-      !num2.includes(".") &&
-      num1.length + num2.length <= SCREEN_WIDTH
-    ) {
-      num2 += ".";
-      screen.textContent = `${num1} ${operator} ${num2}`;
+    if (order === "num1") {
+      // Checking for num1 !== null stops from placing decimal points when there
+      // is no other digits
+      if (num1 !== null) {
+        if (!num1.includes(".") && num1.length <= SCREEN_WIDTH) {
+          num1 += ".";
+          screen.textContent = num1;
+        }
+      }
+    } else if (order === "num2") {
+      if (num2 !== null) {
+        if (!num2.includes(".") && num1.length + num2.length <= SCREEN_WIDTH) {
+          num2 += ".";
+          screen.textContent = `${num1} ${operator} ${num2}`;
+        }
+      }
     }
   }
 }
@@ -214,11 +219,12 @@ function calculate(value) {
   } else if ((!isNaN(parseInt(value)) || value === ".") && operator === null) {
     // Keep adding numbers to num1 while the input are numbers
     addNum("num1", value);
-  } else if (operator === null || OPERATORS.includes(value)) {
+  } else if (
+    operator === null ||
+    (OPERATORS.includes(value) && num2 === null)
+  ) {
     // Only add an input if an operator is selected
     if (OPERATORS.includes(value)) {
-      // TODO: change this so if there's an operator, and you press another
-      // operator, it changes the operator
       if (num1.length <= SCREEN_WIDTH - 1) {
         operator = value;
         screen.textContent = `${num1} ${operator}`;

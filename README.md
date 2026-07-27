@@ -2,6 +2,8 @@
 
 A calculator application which was completed as part of The Odin Project curriculum.
 
+This calculator rounds fractional numbers to the thousandths.
+
 The calculator can function with both button press input via the mouse, or can work with keyboard inputs. The keyboard inputs are as follows:
 
 | Button                       | Function                                                       |
