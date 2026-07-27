@@ -198,6 +198,8 @@ addEventListener("keydown", (e) => {
     } else {
       value = e.key;
     }
+    // XXX: testing
+    console.log(value);
     calculate(value);
   }
 });
